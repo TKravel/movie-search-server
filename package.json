@@ -1,0 +1,17 @@
+{
+  "name": "movie-search-server",
+  "version": "1.0.0",
+  "description": "Server code for movie search app",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tim Kravel",
+  "license": "ISC"
+}
