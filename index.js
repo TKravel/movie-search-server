@@ -7,7 +7,7 @@ const fetch = require('node-fetch');
 const app = express();
 
 const corsOptions = {
-	origin: process.env.CLIENT_URL,
+	origin: [process.env.CLIENT_URL, 'http://localhost:3000'],
 	methods: 'POST',
 	allowedHeaders: ['Content-Type'],
 	credentials: true,
@@ -17,48 +17,42 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json({ extended: true }));
 
-const getGenreCode = (reqGenres) => {
+const getGenreCode = (genre) => {
 	let genreList = '';
 
-	for (const genre in reqGenres) {
-		if (reqGenres[genre]) {
-			switch (genre) {
-				case 'action':
-					genreList += '28,';
-					break;
-				case 'comedy':
-					genreList += '35,';
-					break;
-				case 'drama':
-					genreList += '18,';
-					break;
-				case 'fantasy':
-					genreList += '14,';
-					break;
-				case 'horror':
-					genreList += '27,';
-					break;
-				case 'mystery':
-					genreList += '9648,';
-					break;
-				case 'romance':
-					genreList += '10749,';
-					break;
-				case 'thriller':
-					genreList += '53,';
-					break;
-				case 'western':
-					genreList += '37,';
-					break;
+	switch (genre) {
+		case 'action':
+			genreList = '28';
+			break;
+		case 'comedy':
+			genreList = '35';
+			break;
+		case 'drama':
+			genreList = '18';
+			break;
+		case 'fantasy':
+			genreList = '14';
+			break;
+		case 'horror':
+			genreList = '27';
+			break;
+		case 'mystery':
+			genreList = '9648';
+			break;
+		case 'romance':
+			genreList = '10749';
+			break;
+		case 'thriller':
+			genreList = '53';
+			break;
+		case 'western':
+			genreList = '37';
+			break;
 
-				default:
-					break;
-			}
-		}
+		default:
+			break;
 	}
-	if (genreList.length > 1) {
-		genreList = genreList.slice(0, -1);
-	}
+
 	return genreList;
 };
 
@@ -70,13 +64,13 @@ app.post(`/search`, (req, res) => {
 	const provider = req.body.provider;
 	const startDate = req.body.startDate;
 	const endDate = req.body.endDate;
-	const genres = getGenreCode(req.body.genre);
+	const genre = getGenreCode(req.body.genre);
 	const sort = req.body.sort;
 	const page = req.body.page;
 
 	console.log(req.body);
 	fetch(
-		`https://streaming-availability.p.rapidapi.com/search/pro?country=us&service=${provider}&type=movie&order_by=${sort}&year_min=${startDate}&year_max=${endDate}&genre=${genres}&page=${page}&desc=true&output_language=en&language=en`,
+		`https://streaming-availability.p.rapidapi.com/search/pro?country=us&service=${provider}&type=movie&order_by=${sort}&year_min=${startDate}&year_max=${endDate}&genre=${genre}&page=${page}&desc=true&output_language=en&language=en`,
 		{
 			method: 'GET',
 			headers: {
