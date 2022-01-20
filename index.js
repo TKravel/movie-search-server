@@ -62,6 +62,10 @@ const getGenreCode = (reqGenres) => {
 	return genreList;
 };
 
+app.get('/', (req, res) => {
+	res.send('Hello world');
+});
+
 app.post('/', (req, res) => {
 	const provider = req.body.provider;
 	const startDate = req.body.startDate;
