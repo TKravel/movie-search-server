@@ -66,7 +66,7 @@ app.get('/', (req, res) => {
 	res.send('Hello world');
 });
 
-app.post(`${process.env.CLIENT_URL}/search`, (req, res) => {
+app.post(`/search`, (req, res) => {
 	const provider = req.body.provider;
 	const startDate = req.body.startDate;
 	const endDate = req.body.endDate;
