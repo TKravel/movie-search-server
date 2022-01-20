@@ -10,6 +10,8 @@ const corsOptions = {
 	origin: process.env.CLIENT_URL,
 	methods: 'POST',
 	allowedHeaders: ['Content-Type'],
+	credentials: true,
+	optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
