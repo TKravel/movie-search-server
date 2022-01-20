@@ -1,13 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const fetch = require('node-fetch');
 
 const app = express();
 
 const corsOptions = {
-	origin: 'http://localhost:3000',
+	origin: process.env.CLIENT_URL,
+	methods: 'POST',
+	allowedHeaders: ['Content-Type'],
 };
 
 app.use(cors(corsOptions));
@@ -15,8 +17,6 @@ app.use(express.json({ extended: true }));
 
 const getGenreCode = (reqGenres) => {
 	let genreList = '';
-	console.log('test');
-	console.log(reqGenres);
 
 	for (const genre in reqGenres) {
 		if (reqGenres[genre]) {
@@ -65,9 +65,12 @@ app.post('/', (req, res) => {
 	const startDate = req.body.startDate;
 	const endDate = req.body.endDate;
 	const genres = getGenreCode(req.body.genre);
+	const sort = req.body.sort;
+	const page = req.body.page;
 
+	console.log(req.body);
 	fetch(
-		`https://streaming-availability.p.rapidapi.com/search/pro?country=us&service=${provider}&type=movie&order_by=year&year_min=${startDate}&year_max=${endDate}&genre=${genres}&page=1&desc=true&output_language=en&language=en`,
+		`https://streaming-availability.p.rapidapi.com/search/pro?country=us&service=${provider}&type=movie&order_by=${sort}&year_min=${startDate}&year_max=${endDate}&genre=${genres}&page=${page}&desc=true&output_language=en&language=en`,
 		{
 			method: 'GET',
 			headers: {
