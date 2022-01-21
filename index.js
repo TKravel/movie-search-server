@@ -7,7 +7,7 @@ const fetch = require('node-fetch');
 const app = express();
 
 const corsOptions = {
-	origin: [process.env.CLIENT_URL, 'http://localhost:3000'],
+	origin: process.env.CLIENT_URL,
 	methods: 'POST',
 	allowedHeaders: ['Content-Type'],
 	credentials: true,
