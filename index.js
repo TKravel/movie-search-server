@@ -19,48 +19,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json({ extended: true }));
 
-const getGenreCode = (genre) => {
-	let genreList = '';
-
-	switch (genre) {
-		case 'all':
-			genreList = '';
-			break;
-		case 'action':
-			genreList = '28';
-			break;
-		case 'comedy':
-			genreList = '35';
-			break;
-		case 'drama':
-			genreList = '18';
-			break;
-		case 'fantasy':
-			genreList = '14';
-			break;
-		case 'horror':
-			genreList = '27';
-			break;
-		case 'mystery':
-			genreList = '9648';
-			break;
-		case 'romance':
-			genreList = '10749';
-			break;
-		case 'thriller':
-			genreList = '53';
-			break;
-		case 'western':
-			genreList = '37';
-			break;
-
-		default:
-			break;
-	}
-
-	return genreList;
-};
-
 app.get('/', (req, res) => {
 	res.send('Hello world');
 });
@@ -69,7 +27,7 @@ app.post(`/search`, (req, res) => {
 	const provider = req.body.provider;
 	const startDate = req.body.startDate;
 	const endDate = req.body.endDate;
-	const genre = getGenreCode(req.body.genre);
+	const genre = utils.getGenreCode(req.body.genre);
 	const sort = req.body.sort;
 	const page = req.body.page;
 
@@ -87,7 +45,7 @@ app.post(`/search`, (req, res) => {
 	)
 		.then((response) => response.json())
 		.then((data) => {
-			let results = utils.genreCodeToString(data.results);
+			let results = utils.genreLangCodeToStrings(data.results);
 
 			res.json({ docs: results, count: data.total_pages });
 		});

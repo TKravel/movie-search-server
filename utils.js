@@ -29,10 +29,18 @@
 // "10764":"Reality"
 // "10767":"Talk Show"
 
-module.exports.genreCodeToString = (arr) => {
+module.exports.genreLangCodeToStrings = (arr) => {
 	let movieResults = arr;
 	movieResults.forEach((movie) => {
+		// update language from code while altering obj
+		const languageNames = new Intl.DisplayNames(['en'], {
+			type: 'language',
+		});
+		const language = languageNames.of(movie.originalLanguage);
+		movie.originalLanguage = language;
+		// update genre property to full string from genre code
 		let genreStringsArr = [];
+
 		movie.genres.forEach((genreCode) => {
 			switch (genreCode) {
 				case 1:
@@ -127,4 +135,46 @@ module.exports.genreCodeToString = (arr) => {
 		movie.genres = genreStringsArr;
 	});
 	return movieResults;
+};
+
+module.exports.getGenreCode = (genre) => {
+	let genreList = '';
+
+	switch (genre) {
+		case 'all':
+			genreList = '';
+			break;
+		case 'action':
+			genreList = '28';
+			break;
+		case 'comedy':
+			genreList = '35';
+			break;
+		case 'drama':
+			genreList = '18';
+			break;
+		case 'fantasy':
+			genreList = '14';
+			break;
+		case 'horror':
+			genreList = '27';
+			break;
+		case 'mystery':
+			genreList = '9648';
+			break;
+		case 'romance':
+			genreList = '10749';
+			break;
+		case 'thriller':
+			genreList = '53';
+			break;
+		case 'western':
+			genreList = '37';
+			break;
+
+		default:
+			break;
+	}
+
+	return genreList;
 };
