@@ -23,6 +23,16 @@ app.get('/', (req, res) => {
 	res.send('Hello world');
 });
 
+//  node-fetch error handling
+function checkStatus(res) {
+	if (res.ok) {
+		// res.status >= 200 && res.status < 300
+		return res;
+	} else {
+		throw Error(res.statusText);
+	}
+}
+
 app.post(`/search`, (req, res) => {
 	const provider = req.body.provider;
 	const startDate = req.body.startDate;
@@ -31,7 +41,6 @@ app.post(`/search`, (req, res) => {
 	const sort = req.body.sort;
 	const page = req.body.page;
 
-	console.log(req.body);
 	fetch(
 		`https://streaming-availability.p.rapidapi.com/search/pro?country=us&service=${provider}&type=movie&order_by=${sort}&year_min=${startDate}&year_max=${endDate}&genre=${genre}&page=${page}&desc=true&output_language=en&language=en`,
 		{
@@ -43,11 +52,19 @@ app.post(`/search`, (req, res) => {
 			},
 		}
 	)
+		.then(checkStatus)
 		.then((response) => response.json())
 		.then((data) => {
+			if (data.statusText) {
+				console.log(data.statusText);
+			}
 			let results = utils.genreLangCodeToStrings(data.results);
 
 			res.json({ docs: results, count: data.total_pages });
+		})
+		.catch((err) => {
+			console.log(err.message);
+			res.json({ err: err.message });
 		});
 });
 
