@@ -4,6 +4,8 @@ const cors = require('cors');
 const PORT = process.env.PORT || 3001;
 const fetch = require('node-fetch');
 
+const utils = require('./utils');
+
 const app = express();
 
 const corsOptions = {
@@ -21,6 +23,9 @@ const getGenreCode = (genre) => {
 	let genreList = '';
 
 	switch (genre) {
+		case 'all':
+			genreList = '';
+			break;
 		case 'action':
 			genreList = '28';
 			break;
@@ -82,7 +87,9 @@ app.post(`/search`, (req, res) => {
 	)
 		.then((response) => response.json())
 		.then((data) => {
-			res.json({ docs: data.results, count: data.total_pages });
+			let results = utils.genreCodeToString(data.results);
+
+			res.json({ docs: results, count: data.total_pages });
 		});
 });
 
